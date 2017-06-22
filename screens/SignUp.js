@@ -2,16 +2,17 @@ import React, { Component } from 'react';
 import t from 'tcomb-form-native';
 import Person, { formOptions } from '../models/Person';
 import signUp from '../actions/users/sign-up';
+import { connect } from 'react-redux';
 import ReactNative, {
   View,
   KeyboardAvoidingView,
   TouchableHighlight,
   Text,
 } from 'react-native';
-
+import { Actions } from 'react-native-router-flux';
 import styles from './SignUp.styles';
 
-export default class SignUp extends Component {
+ class SignUp extends Component {
   constructor(props) {
     super(props);
 
@@ -39,8 +40,7 @@ export default class SignUp extends Component {
     const newUser = form.getValue();
     if (!newUser) return;
     console.log(newUser);
-    signUp(newUser);
-    this.clearForm();
+    this.props.signUp(newUser);
   }
 
   render() {
@@ -62,8 +62,9 @@ export default class SignUp extends Component {
             onChange={this.onChange} />
 
           <TouchableHighlight
-            style={styles.button}
-            onPress={this.onSubmit}
+            disabled={loading}
+            style={styles.buttonSecondary}
+            onPress={Actions.signUp}
             underlayColor='#99d9f4'
           >
             <Text style={styles.buttonText}>Sign up</Text>
@@ -73,3 +74,7 @@ export default class SignUp extends Component {
     );
   }
 }
+
+const mapStateToProps = ({ loading }) => ({ loading });
+
+export default connect(mapStateToProps, { signUp })(SignUp);
