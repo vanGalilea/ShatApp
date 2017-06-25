@@ -5,6 +5,7 @@ import {
   API_READY,
   API_ERROR,
 } from '../../middleware/api'
+import { Actions } from 'react-native-router-flux';
 
 export const USER_SIGNED_IN = 'USER_SIGNED_IN';
 export const USER_AUTH_ERROR = 'USER_AUTH_ERROR';
@@ -18,6 +19,7 @@ export default (user) => {
     api.authenticate(user)
       .then((result) => {
         dispatch({ type: API_READY });
+        Actions.chatRoom();
         dispatch({
           type: USER_SIGNED_IN,
           payload: result.data
@@ -25,6 +27,7 @@ export default (user) => {
       })
       .catch((error) => {
         dispatch({ type: API_ERROR, payload: error });
+        Actions.signIn();
         dispatch({
           type: USER_AUTH_ERROR,
           payload: error

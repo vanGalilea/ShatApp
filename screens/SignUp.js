@@ -45,7 +45,7 @@ import styles from './SignUp.styles';
 
   render() {
     const Form = t.form.Form;
-
+    const { loading } = this.props
     return (
       <View style={styles.outerContainer}>
          <KeyboardAvoidingView
@@ -71,10 +71,10 @@ import styles from './SignUp.styles';
           </TouchableHighlight>
         </KeyboardAvoidingView>
       </View>
-    );
+    )
   }
 }
 
-const mapStateToProps = ({ loading }) => ({ loading });
+const mapStateToProps = ({ loading }) => ({ loading })
 
-export default connect(mapStateToProps, { signUp })(SignUp);
+export default connect(mapStateToProps, { signUp })(SignUp)

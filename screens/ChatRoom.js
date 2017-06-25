@@ -5,6 +5,7 @@ import ReactNative, {
   KeyboardAvoidingView,
   TouchableHighlight,
   Text,
+  Image,
 } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
@@ -53,6 +54,24 @@ class ChatRoom extends Component {
     this.clearForm();
   }
 
+  renderMessage(message, index) {
+    const { users } = this.props
+    const author = users.filter((u) => (u._id === message.authorId))[0];
+    console.log(author)
+
+    return (
+      <View ref={`msg${index}`} key={index} style={styles.message}>
+        <Image
+          style={styles.avatar}
+          source={{uri: author.gravatar}} />
+        <View>
+          <Text style={styles.author}>{message.author}</Text>
+          <Text style={styles.text}>{message.text}</Text>
+        </View>
+      </View>
+    );
+  }
+
   render() {
     const Form = t.form.Form;
     let normal = { ...Form.stylesheet.textbox.normal };
@@ -79,12 +98,7 @@ class ChatRoom extends Component {
           { user && user.error ? <Text style={styles.error}>{user.error.name} { user.error.message }</Text> : null }
 
           <ScrollView ref="scrollView">
-            { this.props.messages.map((message, index) => (
-              <View ref={`msg${index}`} key={index} style={styles.message}>
-                <Text style={styles.author}>{message.author}</Text>
-                <Text style={styles.text}>{message.text}</Text>
-              </View>
-            ))}
+            { messages.map(this.renderMessage)}
           </ScrollView>
 
           <View>
@@ -110,6 +124,6 @@ class ChatRoom extends Component {
   }
 }
 
-const mapStateToProps = ({ user, loading, messages }) => ({ user, loading, messages });
+const mapStateToProps = ({ user, loading, messages, users }) => ({ user, loading, messages, users });
 
-export default connect(mapStateToProps, { loadUser, postMessage, subscribeToMessages })(ChatRoom);
+export default connect(mapStateToProps, { loadUser, postMessage, subscribeToMessages, subscribeToUsers })(ChatRoom);
